@@ -7,9 +7,16 @@ class OrderController < ApplicationController
 
     order_info = {
       "SalesOrderDetails": [],
+      "StoreId": 1,
       "SalesOrderNumber": params["name"],
       "SalesOrderDate": params["created_at"].split('T').first,
-      "BillToPerson": {
+      "ShippingCost": params["total_shipping_price_set"]["shop_money"]["amount"].to_f,
+      "TotalTax": params["total_tax_set"]["shop_money"]["amount"].to_f,
+      "Notes": params["note"]
+    }
+
+    if params["billing_address"]
+      order_info["BillToPerson"] = {
         "FirstName": params["billing_address"]["first_name"],
         "LastName": params["billing_address"]["last_name"],
         "Address1": params["billing_address"]["address1"],
@@ -20,8 +27,11 @@ class OrderController < ApplicationController
         "Country": params["billing_address"]["country_code"],
         "EmailAddress": params["email"],
         "PhoneNumber": params["billing_address"]["phone"]
-      },
-      "ShipToPerson": {
+      }
+    end
+
+    if params["shipping_address"]
+      order_info["ShipToPerson"] = {
         "FirstName": params["shipping_address"]["first_name"],
         "LastName": params["shipping_address"]["last_name"],
         "Address1": params["shipping_address"]["address1"],
@@ -31,11 +41,8 @@ class OrderController < ApplicationController
         "Zip": params["shipping_address"]["zip"],
         "Country": params["shipping_address"]["country_code"],
         "PhoneNumber": params["shipping_address"]["phone"]
-      },
-      "ShippingCost": params["total_shipping_price_set"]["shop_money"]["amount"].to_f,
-      "TotalTax": params["total_tax_set"]["shop_money"]["amount"].to_f,
-      "Notes": params["note"]
-    }
+      }
+    end
 
     for line_item in params["line_items"]
       order_info[:SalesOrderDetails] << { 
@@ -46,8 +53,8 @@ class OrderController < ApplicationController
     end
 
     axis = Axis.new
-    puts "--"
-    puts axis.auth_header
+    puts "order_info:"
+    puts order_info
     puts "--"
     axis.post_sales(order_info)
 
