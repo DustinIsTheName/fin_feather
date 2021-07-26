@@ -45,8 +45,11 @@ class OrderController < ApplicationController
     end
 
     for line_item in params["line_items"]
+
+      barcode = ShopifyAPI::Variant.find(line_item["variant_id"]).barcode
+
       order_info[:SalesOrderDetails] << { 
-        "ProductUpc": line_item["id"],
+        "ProductUpc": barcode,
         "QtyOrdered": line_item["quantity"],
         "PriceCharged": line_item["price"]
       }
