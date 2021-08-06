@@ -21,6 +21,9 @@ class Axis
     for product in products
       barcodes = product.variants.map{|v| v.barcode}
       gearfire_products = get_gearfire_products(barcodes)
+
+      next unless gearfire_products
+
       gearfire_inventory = {}
       gearfire_products["axisContent"]["data"].map{|d|
         calculated_inv = d["storeInventory"].first["qoh"] - d["storeInventory"].first["qtyCommitted"]
@@ -86,6 +89,10 @@ class Axis
     request["Content-Type"] = 'application/json'
 
     response = http.request(request)
+
+    if response.read_body.include? "The resource you are looking for"
+      return nil
+    end
 
     JSON.parse response.read_body
   end
