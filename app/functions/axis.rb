@@ -24,6 +24,13 @@ class Axis
 
       next unless gearfire_products
 
+      if gearfire_products["message"] == "Authorization has been denied for this request."
+        get_auth_token
+
+        gearfire_products = get_gearfire_products(barcodes)
+        next unless gearfire_products
+      end
+
       gearfire_inventory = {}
       gearfire_products["axisContent"]["data"].map{|d|
         calculated_inv = d["storeInventory"].first["qoh"] - d["storeInventory"].first["qtyCommitted"]
