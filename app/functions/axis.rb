@@ -58,7 +58,7 @@ class Axis
         if new_price
           unless old_price == new_price
             variant.price = new_price
-            variant.save
+            ShopifyApiRetry.retry { variant.save }
             puts "changed price"
           end
         end
