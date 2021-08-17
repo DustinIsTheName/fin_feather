@@ -1,5 +1,7 @@
-task :loop_products => :environment do |t, args|
-  if Time.now.hour % 3 == 0
+task :loop_products, [:test] => :environment do |t, args|
+  rem = args[:test] || 0
+
+  if Time.now.hour % 3 == rem.to_i
     puts "running"
     axis = Axis.new
     axis.loop_products
