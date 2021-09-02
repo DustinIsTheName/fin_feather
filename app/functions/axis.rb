@@ -4,6 +4,7 @@ class Axis
 
   def initialize
     get_auth_token
+    @current_progress = 0
   end
 
   def loop_products
@@ -19,6 +20,11 @@ class Axis
   def match_inventory(products)
 
     for product in products
+      if @current_progress < AppDatum.first.progress
+        @current_progress += 1
+        next
+      end
+
       barcodes = product.variants.map{|v| v.barcode}
       gearfire_products = get_gearfire_products(barcodes)
 
@@ -72,6 +78,8 @@ class Axis
           end
         end
       end
+
+      @current_progress += 1
     end
 
   end
@@ -147,6 +155,27 @@ class Axis
 
   def show_token
     @api_token
+  end
+
+  def success(job)
+    puts "THERE WE GO"
+    app_datum = AppDatum.first
+    app_datum.progress = 0
+    app_datum.save
+  end
+
+  def error(job, exception)
+    puts "PROBLEM"
+    app_datum = AppDatum.first
+    app_datum.progress = @current_progress
+    app_datum.save
+  end
+
+  def failure(job)
+    puts "FAILURE"
+    app_datum = AppDatum.first
+    app_datum.progress = 0
+    app_datum.save
   end
 
 end
