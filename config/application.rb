@@ -11,7 +11,7 @@ module FinFeather
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
     config.autoload_paths = %W(#{config.root}/app)
-    config.hosts << "f507f3fd4b65.ngrok.io"
+    config.hosts << "d399-2600-387-3-803-00-a2.ngrok.io"
     config.hosts << "fin-and-feather.herokuapp.com"
 
     ShopifyAPI::Base.site = "https://#{ENV["API_KEY"]}:#{ENV["PASSWORD"]}@#{ENV["SHOPIFY_URL"]}/admin"

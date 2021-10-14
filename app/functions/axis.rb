@@ -103,13 +103,31 @@ class Axis
     request["Authorization"] = auth_header
     request["Content-Type"] = 'application/json'
 
-    response = http.request(request)
+    attempt_count = 0
+    max_attempts  = 3
+    begin
+      attempt_count += 1
+      puts "attempt ##{attempt_count}"
+      response = http.request(request)
+    rescue OpenURI::HTTPError => e
+      # it's 404, etc. (do nothing)
+    rescue SocketError, Net::ReadTimeout => e
+      # server can't be reached or doesn't send any respones
+      puts "error: #{e}"
+      sleep 3
+      retry if attempt_count < max_attempts
+    else
+      # connection was successful,
+      # content is fetched,
+      # so here we can parse content with Nokogiri,
+      # or call a helper method, etc.
+      if response.read_body.include? "The resource you are looking for"
+        return nil
+      end
 
-    if response.read_body.include? "The resource you are looking for"
-      return nil
+      JSON.parse response.read_body
     end
-
-    JSON.parse response.read_body
+    
   end
 
   def get_auth_token
