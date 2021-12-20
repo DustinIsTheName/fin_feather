@@ -15,7 +15,7 @@ module FinFeather
     config.hosts << "fin-and-feather.herokuapp.com"
 
     ShopifyAPI::Base.site = "https://#{ENV["API_KEY"]}:#{ENV["PASSWORD"]}@#{ENV["SHOPIFY_URL"]}/admin"
-    ShopifyAPI::Base.api_version = "2021-04"
+    ShopifyAPI::Base.api_version = "2021-07"
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers

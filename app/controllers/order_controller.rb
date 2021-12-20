@@ -25,8 +25,7 @@ class OrderController < ApplicationController
         "State": params["billing_address"]["province_code"],
         "Zip": params["billing_address"]["zip"],
         "Country": params["billing_address"]["country_code"],
-        "EmailAddress": params["email"],
-        "PhoneNumber": params["billing_address"]["phone"]
+        "EmailAddress": params["email"]
       }
     end
 
@@ -39,8 +38,7 @@ class OrderController < ApplicationController
         "City": params["shipping_address"]["city"],
         "State": params["shipping_address"]["province_code"],
         "Zip": params["shipping_address"]["zip"],
-        "Country": params["shipping_address"]["country_code"],
-        "PhoneNumber": params["shipping_address"]["phone"]
+        "Country": params["shipping_address"]["country_code"]
       }
     end
 
