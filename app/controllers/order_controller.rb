@@ -46,11 +46,13 @@ class OrderController < ApplicationController
 
       barcode = ShopifyAPI::Variant.find(line_item["variant_id"]).barcode
 
-      order_info[:SalesOrderDetails] << { 
-        "ProductUpc": barcode,
-        "QtyOrdered": line_item["quantity"],
-        "PriceCharged": line_item["price"]
-      }
+      if barcode
+        order_info[:SalesOrderDetails] << { 
+          "ProductUpc": barcode,
+          "QtyOrdered": line_item["quantity"],
+          "PriceCharged": line_item["price"]
+        }
+      end
     end
 
     axis = Axis.new

@@ -57,7 +57,7 @@ class Axis
         new_inv = gearfire_inventory[variant.barcode]["inventory"]
         puts "old_inv: #{old_inv} | new_inv: #{new_inv}"
 
-        old_price = variant.inventory_quantity.to_f
+        old_price = variant.price.to_f
         new_price = gearfire_inventory[variant.barcode]["price"].to_f
         puts "old_price: #{old_price} | new_price: #{new_price}"
 
