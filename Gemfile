@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.7.1'
 
 group :production do 
-  gem 'pg', '~> 0.20'
+  gem 'pg', '~> 1.0'
   gem 'rails_12factor'
 end
 
